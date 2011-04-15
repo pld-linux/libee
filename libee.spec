@@ -4,12 +4,12 @@
 #
 Summary:	Event expression library
 Name:		libee
-Version:	0.1.0
+Version:	0.3.0
 Release:	1
 License:	LGPL v2.1+
 Group:		Libraries
 Source0:	http://www.libee.org/files/download/%{name}-%{version}.tar.gz
-# Source0-md5:	2a8bd8875c5393cc2bb2b8f00f0870a7
+# Source0-md5:	7d14a7693037d99626299323d9e561a1
 URL:		http://www.libee.org/
 BuildRequires:	autoconf
 BuildRequires:	automake
@@ -67,6 +67,8 @@ rm -rf $RPM_BUILD_ROOT
 %{__make} install \
 	DESTDIR=$RPM_BUILD_ROOT
 
+%{__rm} $RPM_BUILD_ROOT%{_libdir}/libee.la
+
 %clean
 rm -rf $RPM_BUILD_ROOT
 
@@ -83,7 +85,6 @@ rm -rf $RPM_BUILD_ROOT
 %files devel
 %defattr(644,root,root,755)
 %{_libdir}/libee.so
-%{_libdir}/libee.la
 %{_includedir}/libee
 %{_pkgconfigdir}/libee.pc
 
