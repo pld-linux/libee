@@ -4,12 +4,12 @@
 #
 Summary:	Event expression library
 Name:		libee
-Version:	0.3.0
+Version:	0.3.1
 Release:	1
 License:	LGPL v2.1+
 Group:		Libraries
 Source0:	http://www.libee.org/files/download/%{name}-%{version}.tar.gz
-# Source0-md5:	7d14a7693037d99626299323d9e561a1
+# Source0-md5:	61403a9a62b984381cf48454664f915e
 URL:		http://www.libee.org/
 BuildRequires:	autoconf
 BuildRequires:	automake
