@@ -1,21 +1,23 @@
 #
 # Conditional build:
-%bcond_without	static_libs	# don't build static libraries
+%bcond_without	static_libs	# static library
 #
 Summary:	Event expression library
+Summary(pl.UTF-8):	Biblioteka wyrażeń dotyczących zdarzeń
 Name:		libee
-Version:	0.3.1
+Version:	0.4.1
 Release:	1
 License:	LGPL v2.1+
 Group:		Libraries
 Source0:	http://www.libee.org/files/download/%{name}-%{version}.tar.gz
-# Source0-md5:	61403a9a62b984381cf48454664f915e
+# Source0-md5:	7bbf4160876c12db6193c06e2badedb2
 URL:		http://www.libee.org/
-BuildRequires:	autoconf
+BuildRequires:	autoconf >= 2.61
 BuildRequires:	automake
 BuildRequires:	libestr-devel
+BuildRequires:	libtool
 BuildRequires:	libxml2-devel
-BuildRequires:	zlib
+BuildRequires:	zlib-devel
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %description
@@ -25,11 +27,20 @@ messages in a set of standard formats and read a set of different
 input formats. Libee also comes with a handy conversion tool that
 provides format transformation without the need to program.
 
+%description -l pl.UTF-8
+Libee to biblioteka wyrażeń dotychących zdarzeń, zainspirowana
+nadchodzącym standardem CEE. Obecnie daje możliwość generowania i
+wysyłania komunikatów w zbiorze standardowych formatów oraz czytania
+zbioru innych formatów wejściowych. Pakiet zawiera także podręczne
+narzędzie do konwersji, pozwalające na przekształcanie formatów bez
+potrzeby pisania programu.
+
 %package devel
 Summary:	Header files for libee library
 Summary(pl.UTF-8):	Pliki nagłówkowe biblioteki libee
 Group:		Development/Libraries
 Requires:	%{name} = %{version}-%{release}
+Requires:	libestr-devel
 
 %description devel
 Header files for libee library.
@@ -53,13 +64,19 @@ Statyczna biblioteka libee.
 %setup -q
 
 %build
+%{__libtoolize}
 %{__aclocal} -I m4
 %{__autoconf}
 %{__autoheader}
 %{__automake}
 %configure \
+	--disable-silent-rules \
 	%{!?with_static_libs:--disable-static}
-%{__make} -j1
+
+# make can't resolve $(top_builddir)/src/libee.la dependency
+%{__make} -C src libee.la
+
+%{__make}
 
 %install
 rm -rf $RPM_BUILD_ROOT
@@ -78,13 +95,13 @@ rm -rf $RPM_BUILD_ROOT
 %files
 %defattr(644,root,root,755)
 %doc AUTHORS ChangeLog
-%attr(755,root,root) %{_sbindir}/convert
+%attr(755,root,root) %{_sbindir}/libee-convert
 %attr(755,root,root) %{_libdir}/libee.so.*.*.*
 %attr(755,root,root) %ghost %{_libdir}/libee.so.0
 
 %files devel
 %defattr(644,root,root,755)
-%{_libdir}/libee.so
+%attr(755,root,root) %{_libdir}/libee.so
 %{_includedir}/libee
 %{_pkgconfigdir}/libee.pc
 
